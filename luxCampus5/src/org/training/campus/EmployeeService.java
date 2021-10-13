@@ -34,15 +34,19 @@ public class EmployeeService {
 	
 	public Employee[] getByName(String name) {
 		Objects.requireNonNull(name, "please pass valid non-null name");
-		return (Employee[])employees.stream().filter(e->name.equals(e.getName())).toArray();
+		return employees.stream().filter(e->name.equals(e.getName())).toArray(Employee[]::new);
 	}
 	
 	public Employee[] sortByName() {
-		return (Employee[])employees.stream().sorted(Comparator.comparing(Employee::getName)).toArray();
+		return employees.stream().sorted(Comparator.comparing(Employee::getName)).toArray(Employee[]::new);
 	}
 	
 	public Employee[] sortByNameAndSalary() {
-		return (Employee[])employees.stream().sorted(Comparator.comparing(Employee::getName).thenComparing(Employee::getSalary)).toArray();
+		return employees.stream().sorted(Comparator.comparing(Employee::getName).thenComparing(Employee::getSalary)).toArray(Employee[]::new);
+	}
+	
+	public void add(Employee e) {
+		employees.add(e);
 	}
 	
 	public Employee edit(Employee e) {

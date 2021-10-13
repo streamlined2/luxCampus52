@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
+import java.util.stream.Stream.Builder;
 
 public class Container<K extends Comparable<K>,E extends Entity<K>> implements Iterable<E> {
 	private Object[] data;
@@ -48,7 +49,11 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	}
 	
 	public Stream<E> stream(){
-		return Stream.of((E[])data);
+		Builder<E> b=Stream.builder();
+		for(int k=0;k<size;k++) {
+			b.accept((E)data[k]);
+		}
+		return b.build();
 	}
 	
 	public Optional<E> getById(K id) {
