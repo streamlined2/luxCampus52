@@ -1,17 +1,18 @@
 package org.training.campus;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public class Container<K extends Comparable<K>,E extends Entity<K>> implements Iterable<E> {
-	private E[] data;
+	private Object[] data;
 	private int size;
 	
 	public Container(int capacity) {
 		if(capacity<=0) throw new IllegalArgumentException("initial capacity should be positive value");
-		data=(E[])new Object[capacity];
+		data=new Object[capacity];
 		size=0;
 	}
 	
@@ -21,7 +22,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	
 	private void ensureCapacity(int newCapacity) {
 		if(newCapacity>data.length) {
-			E[] newData=(E[])new Object[getNewCapacity(newCapacity)];
+			Object[] newData=new Object[getNewCapacity(newCapacity)];
 			System.arraycopy(data, 0, newData, 0, data.length);
 			data=newData;
 		}
@@ -36,9 +37,9 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 		int finish = size-1;
 		while(start<=finish) {
 			int index = (start+finish)/2;
-			if(data[index].getId().compareTo(id)<0) {
+			if(((E)data[index]).getId().compareTo(id)<0) {
 				start=index+1;
-			}else if(data[index].getId().compareTo(id)>0) {
+			}else if(((E)data[index]).getId().compareTo(id)>0) {
 				finish=index-1;
 			}else {
 				return index;
@@ -48,12 +49,12 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	}
 	
 	public Stream<E> stream(){
-		return Stream.of(data);
+		return Stream.of((E[])data);
 	}
 	
 	public Optional<E> getById(K id) {
 		int index=indexOf(id);
-		return index>0? Optional.ofNullable(data[index]): Optional.empty();
+		return index>0? Optional.ofNullable((E)data[index]): Optional.empty();
 	}
 
 	public void add(E e) {
@@ -69,7 +70,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	public E remove(K id) {
 		int deleteAt=indexOf(id);
 		if(deleteAt<0) throw new NoSuchElementException("no such element found");
-		E toBeDeleted=data[deleteAt];
+		E toBeDeleted=(E)data[deleteAt];
 		System.arraycopy(data, deleteAt+1, data, deleteAt, size-1-deleteAt);
 		size--;
 		return toBeDeleted;		
@@ -82,7 +83,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	public E update(E e) {
 		int updateAt=indexOf(e);
 		if(updateAt<0) throw new NoSuchElementException("no such element found");
-		E toBeUpdated=data[updateAt];
+		E toBeUpdated=(E)data[updateAt];
 		data[updateAt]=e;
 		return toBeUpdated;
 	}
@@ -100,9 +101,18 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 			@Override
 			public E next() {
 				if(index>=size) throw new NoSuchElementException("check if there are elements left before advancing");
-				return data[index++];
+				return (E)(data[index++]);
 			}
 		};
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder b=new StringBuilder();
+		for(E e:this) {
+			b.append(e.toString()).append('\n');
+		}
+		return b.toString();
 	}
 	
 }
