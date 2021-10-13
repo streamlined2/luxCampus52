@@ -1,6 +1,5 @@
 package org.training.campus;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -54,7 +53,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	
 	public Optional<E> getById(K id) {
 		int index=indexOf(id);
-		return index>0? Optional.ofNullable((E)data[index]): Optional.empty();
+		return index>=0? Optional.ofNullable((E)data[index]): Optional.empty();
 	}
 
 	public void add(E e) {

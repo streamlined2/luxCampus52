@@ -1,6 +1,7 @@
 package org.training.campus;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public class Test {
 
@@ -26,8 +27,47 @@ public class Test {
 		e3.setSalary(BigDecimal.valueOf(75_000D));
 		System.out.println(e3.getId());
 		data.add(e3);
+		
+		System.out.println(data.indexOf(e1));
+		System.out.println(data.indexOf(e2));
+		System.out.println(data.indexOf(e3));
+		
+		Optional<Employee> a=data.getById(Long.MIN_VALUE+1);
+		a.ifPresent(x->System.out.println(x));
+		System.out.println();
 
 		System.out.println(data);
+		System.out.println();
+		
+		data.remove(e1);
+		System.out.println(data);
+		System.out.println();
+		
+		data.remove(e2);
+		System.out.println(data);
+		System.out.println();
+		
+		e3.setAge(31);
+		e3.setDefaultBugRate(BigDecimal.valueOf(450D));
+		e3.setFixedBugs(100);
+		e3.setSalary(BigDecimal.valueOf(100_000D));
+		data.update(e3);
+		System.out.println(data);
+		System.out.println();
+		
+		Optional<Employee> e=data.getById(Long.MIN_VALUE+2);
+		if(e.isPresent()) {	
+			e.get().setAge(32);
+			e.get().setDefaultBugRate(BigDecimal.valueOf(600D));
+			e.get().setFixedBugs(200);
+			e.get().setSalary(BigDecimal.valueOf(200_000D));			
+			data.update(e.get());
+			
+			System.out.println(data);
+		}else {
+			System.out.println("not found");
+		}
+		
 	}
 
 }
