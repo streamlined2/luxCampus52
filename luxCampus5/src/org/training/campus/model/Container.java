@@ -1,10 +1,12 @@
-package org.training.campus;
+package org.training.campus.model;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
+
+import org.training.campus.domain.Entity;
 
 public class Container<K extends Comparable<K>,E extends Entity<K>> implements Iterable<E> {
 	private Object[] data;
@@ -20,12 +22,22 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 		return requestedCapacity*2;
 	}
 	
-	private void ensureCapacity(int newCapacity) {
-		if(newCapacity>data.length) {
-			Object[] newData=new Object[getNewCapacity(newCapacity)];
-			System.arraycopy(data, 0, newData, 0, data.length);
-			data=newData;
+	private void ensureCapacity(int requestedCapacity) {
+		if(requestedCapacity>data.length) {
+			allocateCopyData(requestedCapacity);
 		}
+	}
+	
+	private void shrinkCapacity(int requestedCapacity) {
+		if(getNewCapacity(requestedCapacity)<data.length) {
+			allocateCopyData(requestedCapacity);			
+		}
+	}
+
+	public void allocateCopyData(int requestedCapacity) {
+		Object[] newData=new Object[getNewCapacity(requestedCapacity)];
+		System.arraycopy(data, 0, newData, 0, size);
+		data=newData;
 	}
 	
 	public int indexOf(E e) {
@@ -62,9 +74,9 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	}
 
 	public void add(E e) {
-		ensureCapacity(size+1);
 		int index=indexOf(e);
 		if(index>=0) throw new IllegalStateException("such element already exists in container");
+		ensureCapacity(size+1);
 		int placeAt=-index-1;
 		System.arraycopy(data, placeAt, data, placeAt+1, size-placeAt);
 		data[placeAt]=e;
@@ -77,6 +89,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 		E toBeDeleted=(E)data[deleteAt];
 		System.arraycopy(data, deleteAt+1, data, deleteAt, size-1-deleteAt);
 		size--;
+		shrinkCapacity(size);
 		return toBeDeleted;		
 	}
 	

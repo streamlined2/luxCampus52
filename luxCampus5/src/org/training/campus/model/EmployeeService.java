@@ -1,10 +1,12 @@
-package org.training.campus;
+package org.training.campus.model;
 
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.training.campus.domain.Employee;
 
 public class EmployeeService {
 	private static final int INITIAL_CAPACITY=100;
@@ -23,7 +25,7 @@ public class EmployeeService {
 	public BigDecimal calculateSalaryAndBonus() {
 		BigDecimal total=BigDecimal.ZERO;
 		for(Employee e:employees) {
-			total=total.add(e.getSalary()).add(e.getDefaultBugRate().multiply(BigDecimal.valueOf(e.getFixedBugs())));
+			total=total.add(e.getPay());
 		}
 		return total;
 	}
@@ -33,7 +35,7 @@ public class EmployeeService {
 	}
 	
 	public Employee[] getByName(String name) {
-		Objects.requireNonNull(name, "please pass valid non-null name");
+		Objects.requireNonNull(name, "please pass valid non-null employee name");
 		return employees.stream().filter(e->name.equals(e.getName())).toArray(Employee[]::new);
 	}
 	

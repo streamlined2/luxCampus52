@@ -1,10 +1,10 @@
-package org.training.campus;
+package org.training.campus.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class Employee implements Entity<Long> {
+public abstract class Employee implements Entity<Long> {
 	public enum Gender { MALE, FEMALE}
 
 	private static final IdGenerator idGenerator=new IdGenerator();
@@ -12,12 +12,10 @@ public class Employee implements Entity<Long> {
 	private final Long id=idGenerator.nextId();
 	private String name;
 	private int age;
-	private BigDecimal salary;
 	private Gender gender;
-	private int fixedBugs;
-	private BigDecimal defaultBugRate;
+	private BigDecimal salary;
 	
-	public Employee(String name,int age,Gender gender) {
+	protected Employee(String name,int age,Gender gender) {
 		this.name=name;
 		this.age=age;
 		this.gender=gender;
@@ -25,7 +23,12 @@ public class Employee implements Entity<Long> {
 	
 	@Override
 	public String toString() {
-		return new StringJoiner(",","[","]").add(name).add(Integer.toString(age)).add(gender.name()).add(salary.toString()).toString();
+		return new StringJoiner(",","[","]").
+				add(name).
+				add(Integer.toString(age)).
+				add(gender.name()).
+				add(salary.toString()).
+				toString();
 	}
 	
 	public Long getId() {
@@ -65,24 +68,8 @@ public class Employee implements Entity<Long> {
 	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
-
-	public int getFixedBugs() {
-		return fixedBugs;
-	}
-
-	public void setFixedBugs(int fixedBugs) {
-		if(fixedBugs<0) throw new IllegalArgumentException("number of fixed bugs should be zero or positive value");
-		this.fixedBugs = fixedBugs;
-	}
-
-	public BigDecimal getDefaultBugRate() {
-		return defaultBugRate;
-	}
-
-	public void setDefaultBugRate(BigDecimal defaultBugRate) {
-		if(defaultBugRate.compareTo(BigDecimal.ZERO)<=0) throw new IllegalArgumentException("bug rate shouldn't be negative value or equal to zero");
-		this.defaultBugRate = defaultBugRate;
-	}
+	
+	public abstract BigDecimal getPay();
 
 	@Override
 	public int hashCode() {
@@ -92,7 +79,7 @@ public class Employee implements Entity<Long> {
 	@Override
 	public boolean equals(Object o) {
 		if(o instanceof Employee e) {
-			return id==e.id;
+			return id.equals(e.id);
 		}
 		return false; 
 	}

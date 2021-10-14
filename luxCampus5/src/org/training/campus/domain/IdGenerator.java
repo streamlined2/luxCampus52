@@ -1,4 +1,4 @@
-package org.training.campus;
+package org.training.campus.domain;
 
 public class IdGenerator {
 	private long nextId=Long.MIN_VALUE;
