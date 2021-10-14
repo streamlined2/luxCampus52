@@ -18,7 +18,7 @@ public abstract class EmployeeFactory {
 			new DesignerFactory(), new ManagerFactory(), new DeveloperFactory()
 	};
 	
-	public Container<Long,Employee> generateEmployees(int size){
+	public static Container<Long,Employee> generateEmployees(int size){
 		if(size<=0) throw new IllegalArgumentException("please pass positive number of employees to generate");
 		Container<Long,Employee> employees = new Container<>(size);
 		for(int k=0;k<size;k++) {
@@ -47,7 +47,7 @@ public abstract class EmployeeFactory {
 		StringBuilder b=new StringBuilder();
 		int nameLength=generator.nextInt(MAX_NAME_LENGTH-MIN_NAME_LENGTH)+MIN_NAME_LENGTH;
 		for(int k=0;k<nameLength;k++) {
-			b.append('A'+generator.nextInt('Z'-'A'+1));
+			b.append((char)('A'+generator.nextInt('Z'-'A'+1)));
 		}
 		return b.toString();
 	}

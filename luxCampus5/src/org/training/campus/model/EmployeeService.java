@@ -10,7 +10,15 @@ import org.training.campus.domain.Employee;
 
 public class EmployeeService {
 	private static final int INITIAL_CAPACITY=100;
-	private Container<Long,Employee> employees = new Container<>(INITIAL_CAPACITY);
+	private Container<Long,Employee> employees;
+	
+	public EmployeeService() {
+		 employees=new Container<>(INITIAL_CAPACITY);
+	}
+	
+	public EmployeeService(Container<Long,Employee> employees) {
+		this.employees=employees;
+	}
 	
 	public void printEmployees() {
 		printEmployees(System.out);
