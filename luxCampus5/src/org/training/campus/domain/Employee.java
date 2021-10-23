@@ -2,12 +2,13 @@ package org.training.campus.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 public abstract class Employee implements Entity<Long> {
 	public enum Gender { MALE, FEMALE}
 
 	private static final IdGenerator idGenerator=new IdGenerator();
+	
+	public static final int MAX_AGE = 150;
 
 	private final Long id=idGenerator.nextId();
 	private String name;
@@ -19,16 +20,6 @@ public abstract class Employee implements Entity<Long> {
 		this.name=name;
 		this.age=age;
 		this.gender=gender;
-	}
-	
-	@Override
-	public String toString() {
-		return new StringJoiner(",","[","]").
-				add(name).
-				add(Integer.toString(age)).
-				add(gender.name()).
-				add(salary.toString()).
-				toString();
 	}
 	
 	public Long getId() {
@@ -48,17 +39,8 @@ public abstract class Employee implements Entity<Long> {
 	}
 
 	public void setAge(int age) {
-		if(age<0 || age>150) throw new IllegalArgumentException("age should be within [0..150]");
+		if(age<0 || age>MAX_AGE) throw new IllegalArgumentException(String.format("age should be within [0..%d]",MAX_AGE));
 		this.age = age;
-	}
-
-	public BigDecimal getSalary() {
-		return salary;
-	}
-
-	public void setSalary(BigDecimal salary) {
-		if(salary.compareTo(BigDecimal.ZERO)<=0) throw new IllegalArgumentException("salary shouldn't be negative value or equal to zero");
-		this.salary = salary;
 	}
 
 	public Gender getGender() {
@@ -69,8 +51,17 @@ public abstract class Employee implements Entity<Long> {
 		this.gender = gender;
 	}
 	
-	public abstract BigDecimal getPay();
+	public BigDecimal getSalary() {
+		return salary;
+	}
 
+	public void setSalary(BigDecimal salary) {
+		if(salary.compareTo(BigDecimal.ZERO)<=0) throw new IllegalArgumentException("salary couldn't be negative or equal to zero");
+		this.salary = salary;
+	}
+
+	public abstract BigDecimal getPay();
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

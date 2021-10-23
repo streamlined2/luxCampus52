@@ -9,8 +9,13 @@ import java.util.stream.Stream.Builder;
 import org.training.campus.domain.Entity;
 
 public class Container<K extends Comparable<K>,E extends Entity<K>> implements Iterable<E> {
+	private static final int INITIAL_CAPACITY=10;
 	private Object[] data;
 	private int size;
+
+	public Container() {
+		this(INITIAL_CAPACITY);
+	}
 	
 	public Container(int capacity) {
 		if(capacity<=0) throw new IllegalArgumentException("initial capacity should be positive value");
@@ -24,7 +29,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	
 	private void ensureCapacity(int requestedCapacity) {
 		if(requestedCapacity>data.length) {
-			allocateCopyData(requestedCapacity);
+			allocateCopyData(getNewCapacity(requestedCapacity));
 		}
 	}
 	
@@ -34,8 +39,8 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 		}
 	}
 
-	public void allocateCopyData(int requestedCapacity) {
-		Object[] newData=new Object[getNewCapacity(requestedCapacity)];
+	public void allocateCopyData(int newCapacity) {
+		Object[] newData=new Object[Math.max(size, newCapacity)];
 		System.arraycopy(data, 0, newData, 0, size);
 		data=newData;
 	}
@@ -48,7 +53,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 		int start = 0;
 		int finish = size-1;
 		while(start<=finish) {
-			int index = (start+finish)/2;
+			final int index = (start+finish)/2;
 			if(((E)data[index]).getId().compareTo(id)<0) {
 				start=index+1;
 			}else if(((E)data[index]).getId().compareTo(id)>0) {
@@ -61,7 +66,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	}
 	
 	public Stream<E> stream(){
-		Builder<E> b=Stream.builder();
+		final Builder<E> b=Stream.builder();
 		for(int k=0;k<size;k++) {
 			b.accept((E)data[k]);
 		}
@@ -69,28 +74,29 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	}
 	
 	public Optional<E> getById(K id) {
-		int index=indexOf(id);
-		return index>=0? Optional.ofNullable((E)data[index]): Optional.empty();
+		final int index=indexOf(id);
+		if(index>=0) return Optional.ofNullable((E)data[index]); 
+		return Optional.empty();
 	}
 
 	public void add(E e) {
-		int index=indexOf(e);
-		if(index>=0) throw new IllegalStateException("such element already exists in container");
+		final int index=indexOf(e);
+		if(index>=0) throw new IllegalStateException("can't add element that already exists");
 		ensureCapacity(size+1);
-		int placeAt=-index-1;
+		final int placeAt=-index-1;
 		System.arraycopy(data, placeAt, data, placeAt+1, size-placeAt);
 		data[placeAt]=e;
 		size++;
 	}
 	
 	public E remove(K id) {
-		int deleteAt=indexOf(id);
-		if(deleteAt<0) throw new NoSuchElementException("no such element found");
-		E toBeDeleted=(E)data[deleteAt];
-		System.arraycopy(data, deleteAt+1, data, deleteAt, size-1-deleteAt);
+		final int removeAt=indexOf(id);
+		if(removeAt<0) throw new NoSuchElementException("no element to remove");
+		final E toBeRemoved=(E)data[removeAt];
+		System.arraycopy(data, removeAt+1, data, removeAt, size-1-removeAt);
 		size--;
 		shrinkCapacity(size);
-		return toBeDeleted;		
+		return toBeRemoved;		
 	}
 	
 	public E remove(E e) {
@@ -98,9 +104,9 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	}
 	
 	public E update(E e) {
-		int updateAt=indexOf(e);
-		if(updateAt<0) throw new NoSuchElementException("no such element found");
-		E toBeUpdated=(E)data[updateAt];
+		final int updateAt=indexOf(e);
+		if(updateAt<0) throw new NoSuchElementException("no element to update");
+		final E toBeUpdated=(E)data[updateAt];
 		data[updateAt]=e;
 		return toBeUpdated;
 	}
@@ -125,7 +131,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 	
 	@Override
 	public String toString() {
-		StringBuilder b=new StringBuilder();
+		final var b=new StringBuilder();
 		for(E e:this) {
 			b.append(e.toString()).append('\n');
 		}

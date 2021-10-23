@@ -9,7 +9,7 @@ public class DesignerFactory extends EmployeeFactory {
 
 	@Override
 	public Designer create(String name, int age, Gender gender) {
-		Designer designer=new Designer(name,age,gender,generateRate());
+		final Designer designer=new Designer(name,age,gender,generateRate());
 		designer.setSalary(generateSalary());
 		designer.setWorkedDays(generateWorkedDays());
 		return designer;

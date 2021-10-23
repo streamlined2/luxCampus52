@@ -14,16 +14,14 @@ public abstract class EmployeeFactory {
 	
 	public abstract Employee create(String name,int age,Gender gender);
 	
-	private static final EmployeeFactory[] factories=new EmployeeFactory[] {
-			new DesignerFactory(), new ManagerFactory(), new DeveloperFactory()
-	};
-	
 	public static Container<Long,Employee> generateEmployees(int size){
-		if(size<=0) throw new IllegalArgumentException("please pass positive number of employees to generate");
-		Container<Long,Employee> employees = new Container<>(size);
+		if(size<=0) throw new IllegalArgumentException("pass positive number of employees to generate");
+		final EmployeeFactory[] factories=new EmployeeFactory[] {
+				new DesignerFactory(), new ManagerFactory(), new DeveloperFactory()
+		};
+		final Container<Long,Employee> employees = new Container<>(size);
 		for(int k=0;k<size;k++) {
-			EmployeeFactory factory=factories[k%factories.length];
-			employees.add(factory.create(generateName(),generateAge(),generateGender()));
+			employees.add(factories[k%factories.length].create(generateName(),generateAge(),generateGender()));
 		}
 		return employees;
 	}
@@ -44,8 +42,8 @@ public abstract class EmployeeFactory {
 	private static final int MAX_NAME_LENGTH=50;
 	
 	protected static String generateName() {
-		StringBuilder b=new StringBuilder();
-		int nameLength=generator.nextInt(MAX_NAME_LENGTH-MIN_NAME_LENGTH)+MIN_NAME_LENGTH;
+		final var b=new StringBuilder();
+		final int nameLength=generator.nextInt(MAX_NAME_LENGTH-MIN_NAME_LENGTH+1)+MIN_NAME_LENGTH;
 		for(int k=0;k<nameLength;k++) {
 			b.append((char)('A'+generator.nextInt('Z'-'A'+1)));
 		}

@@ -9,7 +9,7 @@ public class DeveloperFactory extends EmployeeFactory {
 
 	@Override
 	public Developer create(String name, int age, Gender gender) {
-		Developer developer=new Developer(name,age,gender,generateBugRate());
+		final Developer developer=new Developer(name,age,gender,generateBugRate());
 		developer.setSalary(generateSalary());
 		developer.setFixedBugs(generateFixedBugs());
 		return developer;

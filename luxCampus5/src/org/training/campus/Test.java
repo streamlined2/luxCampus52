@@ -8,7 +8,7 @@ import org.training.campus.domain.Developer;
 import org.training.campus.domain.Employee;
 import org.training.campus.domain.Manager;
 import org.training.campus.factory.EmployeeFactory;
-import org.training.campus.model.EmployeeService;
+import org.training.campus.service.EmployeeService;
 
 public class Test {
 
