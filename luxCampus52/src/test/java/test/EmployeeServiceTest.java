@@ -175,5 +175,6 @@ class EmployeeServiceTest {
 		Designer e = new Designer("Mary Wild",25,Gender.FEMALE,BigDecimal.valueOf(200D),BigDecimal.valueOf(100_000D));
 		service.add(e);
 		assertTrue(service.getById(e.getId()).isPresent());
+		assertSame(e, service.getById(e.getId()).get());
 	}
 }
