@@ -9,7 +9,7 @@ import java.util.stream.Stream.Builder;
 import org.training.campus.domain.Entity;
 
 public class Container<K extends Comparable<K>,E extends Entity<K>> implements Iterable<E> {
-	private static final int INITIAL_CAPACITY=10;
+	public static final int INITIAL_CAPACITY=10;
 	private Object[] data;
 	private int size;
 
@@ -21,6 +21,14 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 		if(capacity<=0) throw new IllegalArgumentException("initial capacity should be positive value");
 		data=new Object[capacity];
 		size=0;
+	}
+	
+	public int getSize() {
+		return size;
+	}
+	
+	public int getCapacity() {
+		return data.length;
 	}
 	
 	private int getNewCapacity(int requestedCapacity) {
@@ -39,7 +47,7 @@ public class Container<K extends Comparable<K>,E extends Entity<K>> implements I
 		}
 	}
 
-	public void allocateCopyData(int newCapacity) {
+	private void allocateCopyData(int newCapacity) {
 		Object[] newData=new Object[Math.max(size, newCapacity)];
 		System.arraycopy(data, 0, newData, 0, size);
 		data=newData;
