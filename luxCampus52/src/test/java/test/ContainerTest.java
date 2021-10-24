@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -80,8 +78,7 @@ class ContainerTest {
 		assertEquals(e1, employee.get());
 		
 		Optional<Employee> dummy = c.getById(Long.MAX_VALUE);
-		assertFalse(dummy.isPresent());
-		
+		assertFalse(dummy.isPresent());		
 	}
 
 	@Test

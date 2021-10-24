@@ -12,6 +12,11 @@ public class Designer extends Employee {
 		this.rate=rate;
 	}
 
+	public Designer(String name, int age, Gender gender, BigDecimal rate, BigDecimal salary) {
+		super(name, age, gender, salary);
+		this.rate=rate;
+	}
+
 	public BigDecimal getRate() {
 		return rate;
 	}

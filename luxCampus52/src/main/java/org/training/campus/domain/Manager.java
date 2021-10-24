@@ -9,6 +9,10 @@ public class Manager extends Employee {
 		super(name, age, gender);
 	}
 
+	public Manager(String name, int age, Gender gender, BigDecimal salary) {
+		super(name, age, gender, salary);
+	}
+
 	@Override
 	public String toString() {
 		return new StringJoiner(",","[","]").

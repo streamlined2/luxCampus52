@@ -22,6 +22,11 @@ public abstract class Employee implements Entity<Long> {
 		this.gender=gender;
 	}
 	
+	protected Employee(String name,int age,Gender gender,BigDecimal salary) {
+		this(name,age,gender);
+		this.salary=salary;
+	}
+	
 	public Long getId() {
 		return id;
 	}

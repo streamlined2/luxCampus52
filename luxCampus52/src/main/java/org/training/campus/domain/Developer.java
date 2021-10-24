@@ -16,6 +16,11 @@ public class Developer extends Employee {
 		this.defaultBugRate = defaultBugRate;
 	}
 
+	public Developer(String name, int age, Gender gender, BigDecimal defaultBugRate, BigDecimal salary) {
+		super(name, age, gender, salary);
+		this.defaultBugRate = defaultBugRate;
+	}
+
 	@Override
 	public String toString() {
 		return new StringJoiner(",","[","]").

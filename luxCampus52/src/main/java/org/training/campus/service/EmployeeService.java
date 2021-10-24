@@ -10,7 +10,7 @@ import org.training.campus.domain.Employee;
 import org.training.campus.model.Container;
 
 public class EmployeeService {
-	private static final int INITIAL_CAPACITY=100;
+	public static final int INITIAL_CAPACITY=100;
 	private Container<Long,Employee> employees;
 	
 	public EmployeeService() {
