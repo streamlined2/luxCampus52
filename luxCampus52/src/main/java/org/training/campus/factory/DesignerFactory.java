@@ -9,7 +9,7 @@ public class DesignerFactory extends EmployeeFactory {
 
 	@Override
 	public Designer create(String name, int age, Gender gender) {
-		final Designer designer=new Designer(name,age,gender,generateRate());
+		final Designer designer = new Designer(name, age, gender, generateRate());
 		designer.setSalary(generateSalary());
 		designer.setWorkedDays(generateWorkedDays());
 		return designer;
@@ -20,7 +20,7 @@ public class DesignerFactory extends EmployeeFactory {
 	}
 
 	protected static BigDecimal generateRate() {
-		return BigDecimal.valueOf(generator.nextDouble()*200D);
+		return BigDecimal.valueOf(generator.nextDouble() * 200D);
 	}
 
 }

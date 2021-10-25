@@ -15,14 +15,10 @@ public class Manager extends Employee {
 
 	@Override
 	public String toString() {
-		return new StringJoiner(",","[","]").
-				add(getName()).
-				add(Integer.toString(getAge())).
-				add(getGender().name()).
-				add(getSalary().toString()).
-				toString();
+		return new StringJoiner(",", "[", "]").add(getName()).add(Integer.toString(getAge())).add(getGender().name())
+				.add(getSalary().toString()).toString();
 	}
-	
+
 	@Override
 	public BigDecimal getPay() {
 		return getSalary();
